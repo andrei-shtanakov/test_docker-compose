@@ -1,0 +1,63 @@
+version: "3"
+services:
+  web_nginx:
+    image: localhost:5000/nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - "./static:/usr/share/nginx/html"
+    networks:
+      net1:
+        ipv4_address: 172.16.238.2
+      default:
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+  web_httpd:
+    image: localhost:5000/httpd
+    volumes:
+      - "./static:/usr/local/apache2/htdocs/"
+    ports:
+      - "8001:80"
+    networks:
+      net2:
+        ipv4_address: 172.16.8.2
+      default:
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 512M
+        reservations:
+          cpus: "0.25"
+          memory: 128M
+
+networks:
+  net1:
+    driver: bridge
+    internal: true
+    ipam:
+     driver: default
+     config:
+       - subnet: 172.16.238.0/24
+  net2:
+    driver: bridge
+    internal: true
+    ipam:
+     driver: default
+     config:
+       - subnet: 172.16.8.0/24
+
+
+
+
+
+#External network actually
+  default:
+    driver: bridge
+
