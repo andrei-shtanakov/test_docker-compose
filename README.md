@@ -1,6 +1,7 @@
 За основу были взяты образы nginx и apache2, соответственно, докерафйлы с фафлами конфигураций  статическими html страницами в каталогах test_nginx и test_httpd. (Докерфайлы тоже тестировались с внешними статическими страницами).
 Структура папокЖ
 
+```
 ├── docker-compose.yaml
 ├── Screenshot from 2021-07-25 18-34-37.png
 ├── Screenshot from 2021-07-25 18-35-55.png
@@ -17,7 +18,7 @@
     │   └── index.html
     └── .nginx
         └── nginx.conf
-
+```
 
 
 Затем создается локальный репозиторий:
@@ -38,10 +39,9 @@ docker push localhost:5000/httpd
 
 docker-compose up
 
-*********************************************************
 ниже приведены файлы для docker-compose и Dockerfile
 
-
+```
 docker-compose.yaml:
 
 
@@ -107,27 +107,25 @@ networks:
 #External network actually
   default:
     driver: bridge
+```
 
-
-**********************************************
 
 Dockerfile (nginx)
-
+```
 FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 COPY ./files/ /usr/share/nginx/html
 COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
-
-**********************************************
+```
 
 Dockerfile (apache2)
-
+```
 FROM httpd:2.4
 COPY ./my-httpd.conf /usr/local/apache2/conf/httpd.conf
 COPY ./files/ /usr/local/apache2/htdocs/
 COPY files /var/www/public
 RUN chown -R www-data:www-data /var/www/public
 EXPOSE 80
-
+```
 
